@@ -32,6 +32,9 @@ class _WelcomePageState extends State<WelcomePage> {
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
+          ),
+          Row(
+            children: [],
           )
         ],
       ),
