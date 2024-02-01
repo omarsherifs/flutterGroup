@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_group_1/app_settings.dart';
 import 'package:flutter_group_1/screens/nav_bar_pages/categories_screen.dart';
 import 'package:flutter_group_1/screens/nav_bar_pages/main_screen.dart';
 import 'package:flutter_group_1/screens/nav_bar_pages/settings_screen.dart';
 import 'package:flutter_group_1/screens/sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
-  final String phoneNumber;
-  const HomePage({Key? key, required this.phoneNumber}) : super(key: key);
+  const HomePage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -32,11 +35,8 @@ class _HomePageState extends State<HomePage> {
               height: 100,
             ),
             InkWell(
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => SignInPage()),
-                );
+              onTap: () async {
+                _showMyDialog();
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -63,5 +63,44 @@ class _HomePageState extends State<HomePage> {
   onNavBarTapped(int index) {
     pageIndex = index;
     setState(() {});
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Signout'),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Are you wanna sign out?'),
+                Text('You well need to login again.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Yes'),
+              onPressed: () async {
+                final SharedPreferences prefs = await SharedPreferences.getInstance();
+                await prefs.remove(AppSettings.phoneNumberSharedPrefsKey);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => SignInPage()),
+                );
+              },
+            ),
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

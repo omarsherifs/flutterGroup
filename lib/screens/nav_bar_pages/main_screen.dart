@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_group_1/screens/product_details_screen.dart';
 import 'package:flutter_group_1/widgets/item_card_widget.dart';
 
 class MainScreen extends StatefulWidget {
@@ -19,7 +20,17 @@ class _MainScreenState extends State<MainScreen> {
     return ListView.builder(
       itemCount: productNames.length,
       itemBuilder: (BuildContext context, int index) {
-        return ItemCard(productName: productNames[index]);
+        return InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ProductDetailsScreen(
+                          productName: productNames[index],
+                        )),
+              );
+            },
+            child: ItemCard(productName: productNames[index]));
       },
     );
   }

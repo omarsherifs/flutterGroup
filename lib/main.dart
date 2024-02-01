@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_group_1/screens/sign_in.dart';
+import 'package:flutter_group_1/screens/splash_screen.dart';
 
 // Entry Point Of Dart program
 void main() {
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: const SignInPage(),
+      home: const SplashScreen(),
     );
   }
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_group_1/app_settings.dart';
 import 'package:flutter_group_1/screens/home_page.dart';
 import 'package:flutter_group_1/widgets/app_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -73,7 +75,7 @@ class _SignInPageState extends State<SignInPage> {
               AppButton(
                 label: "Log in",
                 color: Colors.blue[300]!,
-                onTap: () {
+                onTap: () async {
                   if (_formKey.currentState!.validate()) {
                     if (kDebugMode) {
                       print("Logged in");
@@ -85,12 +87,12 @@ class _SignInPageState extends State<SignInPage> {
                     //             phoneNumber: phoneNumberController.text,
                     //           )),
                     // );
+                    final SharedPreferences prefs = await SharedPreferences.getInstance();
+                    await prefs.setString(AppSettings.phoneNumberSharedPrefsKey, phoneNumberController.text);
+
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => HomePage(
-                                phoneNumber: phoneNumberController.text,
-                              )),
+                      MaterialPageRoute(builder: (context) => HomePage()),
                     );
                     // phoneNumberController.clear();
                     passwordController.clear();
