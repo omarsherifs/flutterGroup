@@ -13,11 +13,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   void initState() {
     super.initState();
-    getUserPhoneNumber();
+    getUserEmail();
   }
 
-  Future<void> getUserPhoneNumber() async {
-    userPhone = await SettingsUtil.getCachedUserPhone();
+  Future<void> getUserEmail() async {
+    userPhone = await SettingsUtil.getCachedUserEmail();
     setState(() {});
   }
 

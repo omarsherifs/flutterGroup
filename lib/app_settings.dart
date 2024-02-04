@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
 class AppSettings {
-  static const String phoneNumberSharedPrefsKey = "user_phone_number";
+  static const String emailSharedPrefsKey = "user_email";
   static Color mainAppColor = Colors.blue;
 }

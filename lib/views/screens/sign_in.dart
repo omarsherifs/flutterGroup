@@ -1,9 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_group_1/app_settings.dart';
+import 'package:flutter_group_1/core/firebase_auth_util.dart';
 import 'package:flutter_group_1/views/screens/home_page.dart';
 import 'package:flutter_group_1/views/widgets/app_button.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -14,9 +13,9 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController phoneNumberController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     // سياق بناء الصفحة context
@@ -36,16 +35,16 @@ class _SignInPageState extends State<SignInPage> {
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: TextFormField(
-                  controller: phoneNumberController,
-                  keyboardType: TextInputType.phone,
+                  controller: emailController,
+                  keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(
-                    labelText: "Phone Number",
+                    labelText: "email",
                   ),
                   validator: (value) {
-                    if (value!.length > 8 && value.length < 10) {
+                    if (value!.isNotEmpty) {
                       return null;
                     } else {
-                      return "Invalid Phone number";
+                      return "Invalid Email";
                     }
                     // regex validation code
                     //     String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
@@ -61,6 +60,7 @@ class _SignInPageState extends State<SignInPage> {
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: TextFormField(
+                  obscureText: true,
                   controller: passwordController,
                   decoration: const InputDecoration(labelText: "Password"),
                   validator: (value) {
@@ -72,33 +72,39 @@ class _SignInPageState extends State<SignInPage> {
                 ),
               ),
               // DRY Don't repeat yourself
-              AppButton(
-                label: "Log in",
-                color: Colors.blue[300]!,
-                onTap: () async {
-                  if (_formKey.currentState!.validate()) {
-                    if (kDebugMode) {
-                      print("Logged in");
-                    }
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //       builder: (context) => WelcomePage(
-                    //             phoneNumber: phoneNumberController.text,
-                    //           )),
-                    // );
-                    final SharedPreferences prefs = await SharedPreferences.getInstance();
-                    await prefs.setString(AppSettings.phoneNumberSharedPrefsKey, phoneNumberController.text);
+              isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : AppButton(
+                      label: "Log in",
+                      color: Colors.blue[300]!,
+                      onTap: () async {
+                        if (_formKey.currentState!.validate()) {
+                          if (kDebugMode) {
+                            print("Logged in");
+                          }
 
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => const HomePage()),
-                    );
-                    // phoneNumberController.clear();
-                    passwordController.clear();
-                  }
-                },
-              ),
+                          isLoading = true;
+                          setState(() {});
+                          bool loginResult = await FirebaseAuthUtil.loginIn(
+                              email: emailController.text, password: passwordController.text);
+                          if (loginResult) {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => const HomePage()),
+                            );
+                          } else {
+                            var snackBar = const SnackBar(
+                              content: Text("Email or password is not correct"),
+                            );
+                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          }
+                          isLoading = false;
+                          setState(() {});
+                        }
+                      },
+                    ),
 
               const SizedBox(
                 height: 15,

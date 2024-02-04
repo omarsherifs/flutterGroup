@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_group_1/core/settings_util.dart';
+import 'package:flutter_group_1/views/screens/add_category_page.dart';
 import 'package:flutter_group_1/views/screens/nav_bar_pages/categories_screen.dart';
 import 'package:flutter_group_1/views/screens/nav_bar_pages/main_screen.dart';
 import 'package:flutter_group_1/views/screens/nav_bar_pages/settings_screen.dart';
@@ -15,7 +16,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int pageIndex = 0;
-  String phoneNumber = "";
+  String userEmail = "";
   List<Widget> pages = [
     const MainScreen(),
     const CategoriesScreen(),
@@ -24,11 +25,11 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    getPhoneNumber();
+    getUserEmail();
   }
 
-  Future<void> getPhoneNumber() async {
-    phoneNumber = await SettingsUtil.getCachedUserPhone();
+  Future<void> getUserEmail() async {
+    userEmail = await SettingsUtil.getCachedUserEmail();
     setState(() {});
   }
 
@@ -72,7 +73,7 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [Text("Phone: $phoneNumber")],
+                    children: [Text("Email: $userEmail")],
                   )
                 ],
               ),
@@ -84,10 +85,15 @@ class _HomePageState extends State<HomePage> {
                   title: Text("Profile"),
                 )),
             InkWell(
-                onTap: () async {},
+                onTap: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const AddCategoryPage()),
+                  );
+                },
                 child: const ListTile(
                   leading: Icon(Icons.add_shopping_cart),
-                  title: Text("Add product"),
+                  title: Text("Add category"),
                 )),
             InkWell(
                 onTap: () async {},

@@ -37,6 +37,9 @@ dependencies:
   shared_preferences: ^2.2.2
   carousel_slider: ^4.2.1
   dio: ^5.4.0
+  firebase_core: ^2.24.2
+  firebase_auth: ^4.16.0
+  cloud_firestore: ^4.14.0
 
 dev_dependencies:
   flutter_test:
