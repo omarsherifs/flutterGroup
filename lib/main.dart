@@ -10,6 +10,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   // Entry point of Flutter Application
   runApp(const MyApp());
 }
