@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_group_1/controllers/product_cubit/products_cubit.dart';
 import 'package:flutter_group_1/views/screens/product_details_screen.dart';
 import 'package:flutter_group_1/views/widgets/item_card_widget.dart';
+import 'package:lottie/lottie.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -26,8 +27,8 @@ class _MainScreenState extends State<MainScreen> {
         },
         builder: (context, state) {
           if (state is ProductsLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
+            return Center(
+              child: Lottie.asset('assets/loading_animation.json'),
             );
           }
           if (state is ProductsError) {
